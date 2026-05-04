@@ -31,7 +31,7 @@ class AuthController extends Controller
         // รหัสผ่าน
         'password.required' => 'กรุณากรอกรหัสผ่าน',
         'password.min' => 'รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร',
-        'password.confirmed' => 'รหัสผ่านยืนยันไม่ตรงกัน', // แก้ตรงนี้ตามที่คุณต้องการ
+        'password.confirmed' => 'รหัสผ่านยืนยันไม่ตรงกัน', 
         
         // ประเภทผู้ใช้งาน
         'role.required' => 'กรุณาระบุประเภทผู้ใช้งาน',
@@ -53,7 +53,7 @@ class AuthController extends Controller
 
     $token = $user->createToken('auth_token')->plainTextToken;
 
-    // 2. ส่ง Success Response กลับไป (อันนี้ต้องมี)
+    // 2. ส่ง Success Response กลับไป 
     return response()->json([
         'status' => 'success',
         'message' => 'สมัครสมาชิกสำเร็จ',

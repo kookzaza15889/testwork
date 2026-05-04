@@ -12,14 +12,22 @@ class CooperativeRequestController extends Controller
 {
     // 1. ดูรายการคำขอของตัวเอง (User ทั่วไป)
     public function index(Request $request)
-    {
-        $requests = CooperativeRequest::where('user_id', $request->user()->id)->get();
-
+{
+    // เช็คก่อนว่ามี user ล็อกอินมาจริงไหม
+    if (!$request->user()) {
         return response()->json([
-            'status' => 'success',
-            'data' => $requests
-        ], 200);
+            'status' => 'error',
+            'message' => 'เกิดข้อผิดพลาดไม่มีข้อมูล user'
+        ], 401);
     }
+
+    $requests = CooperativeRequest::where('user_id', $request->user()->id)->get();
+
+    return response()->json([
+        'status' => 'success',
+        'data' => $requests
+    ], 200);
+}
 
     // 2. ดูคำขอทั้งหมด พร้อมระบบกรองสถานะ (สำหรับ Staff)
     public function allRequests(Request $request)
@@ -41,16 +49,16 @@ class CooperativeRequestController extends Controller
 
         // ดึงข้อมูลตามเงื่อนไขการกรอง (ถ้ามี)
         $requests = CooperativeRequest::query()
-            // ->with('user') // เปิดใช้เมื่อตั้งค่า Relationship ใน Model แล้ว[cite: 1]
+            // ->with('user') // เปิดใช้เมื่อตั้งค่า Relationship ใน Model แล้ว
             ->when($request->filled('status'), function ($query) use ($request) {
                 return $query->where('status', $request->status);
-            })
+            })->orderBy('updated_at', 'asc')
             ->get();
 
-        // แยกกลุ่มข้อมูลตามสถานะ[cite: 1]
+        // แยกกลุ่มข้อมูลตามสถานะ
         $groupedData = $requests->groupBy('status');
 
-        // นับจำนวนสมาชิกในแต่ละกลุ่มแยกกัน[cite: 1]
+        // นับจำนวนสมาชิกในแต่ละกลุ่มแยกกัน
         $groupCounts = $groupedData->map(function ($group) {
             return $group->count();
         });
