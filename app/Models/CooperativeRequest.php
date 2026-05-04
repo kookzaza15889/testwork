@@ -14,7 +14,7 @@ class CooperativeRequest extends Model
         'user_id',
         'name',
         'member_count',
-        'status', 
+        'status',
         'remark'
     ];
     protected function casts(): array
@@ -23,6 +23,6 @@ class CooperativeRequest extends Model
             'created_at' => 'datetime:d/m/Y H:i:s',
             'updated_at' => 'datetime:d/m/Y H:i:s',
         ];
-    }  
-     
+    }
+
 }

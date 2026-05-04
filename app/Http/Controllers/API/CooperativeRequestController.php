@@ -12,22 +12,22 @@ class CooperativeRequestController extends Controller
 {
     // 1. ดูรายการคำขอของตัวเอง (User ทั่วไป)
     public function index(Request $request)
-{
-    // เช็คก่อนว่ามี user ล็อกอินมาจริงไหม
-    if (!$request->user()) {
+    {
+        // เช็คก่อนว่ามี user ล็อกอินมาจริงไหม
+        if (!$request->user()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'เกิดข้อผิดพลาดไม่มีข้อมูล user'
+            ], 401);
+        }
+
+        $requests = CooperativeRequest::where('user_id', $request->user()->id)->get();
+
         return response()->json([
-            'status' => 'error',
-            'message' => 'เกิดข้อผิดพลาดไม่มีข้อมูล user'
-        ], 401);
+            'status' => 'success',
+            'data' => $requests
+        ], 200);
     }
-
-    $requests = CooperativeRequest::where('user_id', $request->user()->id)->get();
-
-    return response()->json([
-        'status' => 'success',
-        'data' => $requests
-    ], 200);
-}
 
     // 2. ดูคำขอทั้งหมด พร้อมระบบกรองสถานะ (สำหรับ Staff)
     public function allRequests(Request $request)
@@ -65,9 +65,9 @@ class CooperativeRequestController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'total_count' => $requests->count(), 
-            'group_counts' => $groupCounts,      
-            'data' => $groupedData               
+            'total_count' => $requests->count(),
+            'group_counts' => $groupCounts,
+            'data' => $groupedData
         ], 200);
     }
     // 3. ยื่นคำขอจัดตั้งสหกรณ์
@@ -106,37 +106,37 @@ class CooperativeRequestController extends Controller
 
     // 4. ตรวจสอบและอนุมัติคำขอ (สำหรับ Staff)
     public function review(Request $request, $id)
-{
-    $coopRequest = CooperativeRequest::findOrFail($id);
+    {
+        $coopRequest = CooperativeRequest::findOrFail($id);
 
-    $validator = Validator::make($request->all(), [
-        'status' => 'required|in:approved,rejected',
-        'remark' => 'required|string'
-    ], [
-        'status.in' => 'สถานะต้องเป็น approved หรือ rejected เท่านั้น',
-    ]);
+        $validator = Validator::make($request->all(), [
+            'status' => 'required|in:approved,rejected',
+            'remark' => 'required|string'
+        ], [
+            'status.in' => 'สถานะต้องเป็น approved หรือ rejected เท่านั้น',
+        ]);
 
-    if ($validator->fails()) {
-        return response()->json([
-            'status' => 'error',
-            'errors' => $validator->errors()
-        ], 422);
-    }
-    if ($coopRequest->status !== 'pending') {
+        if ($validator->fails()) {
             return response()->json([
-                'status' => 'error',    
+                'status' => 'error',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+        if ($coopRequest->status !== 'pending') {
+            return response()->json([
+                'status' => 'error',
                 'message' => 'สหกรณ์แห่งนี้ได้รับการตรวจสอบแล้ว'
             ], 422);
         }
         $coopRequest->update([
-        'status' => $request->status,
-        'remark' => $request->remark
-    ]);
+            'status' => $request->status,
+            'remark' => $request->remark
+        ]);
 
-    return response()->json([
-        'status' => 'success',
-        'message' => 'ตรวจสอบสถานะเรียบร้อยแล้ว',
-        'data' => $coopRequest
-    ], 200);
-}
+        return response()->json([
+            'status' => 'success',
+            'message' => 'ตรวจสอบสถานะเรียบร้อยแล้ว',
+            'data' => $coopRequest
+        ], 200);
+    }
 }
