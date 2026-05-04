@@ -19,8 +19,8 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed', // Laravel 11 จะจัดการ hash ให้ตอน save อัตโนมัติ
-            'created_at' => 'datetime:d/m/Y',
-            'updated_at' => 'datetime:d/m/Y',
+            'created_at' => 'datetime:d/m/Y H:i:s',
+            'updated_at' => 'datetime:d/m/Y H:i:s',
         ];
     }
 
