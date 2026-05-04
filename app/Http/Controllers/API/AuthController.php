@@ -44,6 +44,7 @@ class AuthController extends Controller
                 'errors' => $validator->errors()
             ], 422);
         }
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -53,12 +54,19 @@ class AuthController extends Controller
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        // 2. ส่ง Success Response กลับไป 
+        // 2. ส่ง Success Response กลับไป (จัดเรียง key ใหม่ให้ id อยู่บนสุด)
         return response()->json([
             'status' => 'success',
             'message' => 'สมัครสมาชิกสำเร็จ',
-            'data' => $user,
-            'access_token' => $token,
+            'data' => [
+                'id'         => $user->id,
+                'name'       => $user->name,
+                'email'      => $user->email,
+                'role'       => $user->role,
+                'created_at' => $user->created_at,
+                'updated_at' => $user->updated_at,
+            ],
+            'token' => $token,
         ], 201);
     }
 
