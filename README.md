@@ -1,8 +1,8 @@
 ***🚀 วิธีการรัน API***
 
-***หมายเหตุ*** สามารถข้ามไป login ได้เลยเนื่องจาก มี seed user อยู่แล้ว
-***หมายเหตุ*** API ตัวนี้รองรับ php version 8.4 ขึ้นไป หากรันด้วย xampp ที่ต่ำกว่า 8.4 ต้อง upgrate php version ในไฟล์ xampp ให้สามารถรันด้วย php version 8.4 ได้
-***หมายเหตุ*** รูปแบบการรันเป็นการรันผ่าน postman แบบ local ทั้งหมด
+***หมายเหตุ*** สามารถข้ามไป login ได้เลยเนื่องจาก มี seed user อยู่แล้ว   
+***หมายเหตุ*** API ตัวนี้รองรับ php version 8.4 ขึ้นไป หากรันด้วย xampp ที่ต่ำกว่า 8.4 ต้อง upgrate php version ในไฟล์ xampp ให้สามารถรันด้วย php version 8.4 ได้   
+***หมายเหตุ*** รูปแบบการรันเป็นการรันผ่าน postman แบบ local ทั้งหมด   
 ### 1.register
 โดยจัด body(raw) เป็นแบบตัวอย่าง โดยที่ password ต้องไม่ตำกว่า 8 ตัว และ role สามารถเลือกได้แแค่ public หรือ staff
 ```json
@@ -76,12 +76,12 @@ http://127.0.0.1:8000/api/admin/coop-requests/1/review
 ```
 ***การตั้งค่า env***
 
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=testwork_db  
-DB_USERNAME=root
-DB_PASSWORD=
+DB_CONNECTION=mysql   
+DB_HOST=127.0.0.1   
+DB_PORT=3306   
+DB_DATABASE=testwork_db   
+DB_USERNAME=root   
+DB_PASSWORD=   
 
 ***คำสั่ง migrate***
 ### 1.สร้าง database ด้วยคำสั่ง php artisan migrate 
