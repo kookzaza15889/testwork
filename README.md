@@ -24,7 +24,7 @@
 email    = public@test.com
 password = 123456789
 
-***seed user public***
+***seed user staff***
 email    = staff@test.com
 password = 123456789
 
